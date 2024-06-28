@@ -1,9 +1,12 @@
 import math
 
+from src.theatrical_player.credits import Credits
+
 
 def statement_printer(invoice, plays):
     total_amount = 0
     volume_credits = 0
+    _credits = Credits(initial_credits=0)
     result = f'Statement for {invoice["customer"]}\n'
 
     def format_as_dollars(amount):
@@ -25,11 +28,16 @@ def statement_printer(invoice, plays):
         else:
             raise ValueError(f'unknown type: {play["type"]}')
 
-        # add volume credits
-        volume_credits += max(perf['audience'] - 30, 0)
+        # add volume total_credits
+        performance_credits = max(perf['audience'] - 30, 0)
+        _credits = _credits.add(Credits(performance_credits))
+        volume_credits += performance_credits
+
         # add extra credit for every ten comedy attendees
         if "comedy" == play["type"]:
-            volume_credits += math.floor(perf['audience'] / 5)
+            performance_credits = math.floor(perf['audience'] / 5)
+            _credits = _credits.add(Credits(performance_credits))
+            volume_credits += performance_credits
         # print line for this order
         result += f' {play["name"]}: {format_as_dollars(this_amount/100)} ({perf["audience"]} seats)\n'
         total_amount += this_amount
