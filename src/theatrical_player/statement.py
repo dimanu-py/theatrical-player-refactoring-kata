@@ -43,6 +43,6 @@ def statement_printer(invoice, plays):
         total_amount += this_amount
 
     result += f'Amount owed is {format_as_dollars(total_amount/100)}\n'
-    result += f'You earned {volume_credits} credits\n'
+    result += f'You earned {total_credits} credits\n'
     return result
 
