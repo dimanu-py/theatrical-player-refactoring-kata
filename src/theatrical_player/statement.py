@@ -2,6 +2,7 @@ import math
 
 from src.theatrical_player.credits import Credits
 from src.theatrical_player.money import Money
+from src.theatrical_player.play import Play
 
 
 class StatementPrinter:
@@ -15,6 +16,7 @@ class StatementPrinter:
 
         for perf in invoice['performances']:
             play = plays[perf['playID']]
+            performance_play = Play(name=play["name"], genre=play["type"])
 
             performance_amount = self.compute_performance_amount(perf, play)
             performance_credits = self.compute_performance_credits(perf, play)
