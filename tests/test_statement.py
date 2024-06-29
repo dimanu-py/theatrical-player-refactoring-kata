@@ -3,7 +3,7 @@ import unittest
 from approvaltests import verify
 
 from src.theatrical_player.invoice import Invoice
-from src.theatrical_player.performance import Performance
+from src.theatrical_player.performance import Performance, PerformancesRepository
 from src.theatrical_player.play import Play
 from src.theatrical_player.statement import StatementPrinter
 from tests.conftest import IntelliJDiffReporter
@@ -22,13 +22,14 @@ class TestStatement(unittest.TestCase):
             Performance("as-like", 35),
             Performance("othello", 40)
         ]
+        performances_repository = PerformancesRepository(performances)
         plays = {
             "hamlet": Play("Hamlet", "tragedy"),
             "as-like": Play("As You Like It", "comedy"),
             "othello": Play("Othello", "tragedy")
         }
 
-        invoice = Invoice(customer=self.CUSTOMER, performances=performances)
+        invoice = Invoice(customer=self.CUSTOMER, performances=performances, performances_repository=performances_repository)
 
         verify(
             self.statement_printer.print(invoice, plays),
@@ -45,7 +46,7 @@ class TestStatement(unittest.TestCase):
             "as-like": Play("As You Like It", "pastoral")
         }
 
-        invoice = Invoice(customer=self.CUSTOMER, performances=performances)
+        invoice = Invoice(customer=self.CUSTOMER, performances=performances, performances_repository=None)
 
         with self.assertRaises(ValueError) as exception_info:
             self.statement_printer.print(invoice, plays)
