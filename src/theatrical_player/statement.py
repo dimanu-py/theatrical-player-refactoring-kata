@@ -20,9 +20,8 @@ class StatementPrinter:
             extra_credits_by_audience = Credits(max(perf['audience'] - 30, 0))
             self.credits = self.credits.add(extra_credits_by_audience)
 
-            if "comedy" == play["type"]:
-                comedy_extra_credits = Credits(math.floor(perf['audience'] / 5))
-                self.credits = self.credits.add(comedy_extra_credits)
+            extra_credits_by_genre = self.extra_credits_by_genre(perf, play)
+            self.credits = self.credits.add(extra_credits_by_genre)
             # print line for this order
             result += f' {play["name"]}: {performance_amount.as_dollar()} ({perf["audience"]} seats)\n'
             self.money = self.money.add(performance_amount)
@@ -30,6 +29,12 @@ class StatementPrinter:
         result += f'Amount owed is {self.money.as_dollar()}\n'
         result += f'You earned {self.credits} credits\n'
         return result
+
+    @staticmethod
+    def extra_credits_by_genre(perf: dict[str, str | int], play: dict[str, str]) -> Credits:
+        if "comedy" == play["type"]:
+            return Credits(math.floor(perf['audience'] / 5))
+        return Credits(0)
 
     def compute_performance_amount(self, perf: dict[str, str | int], play: dict[str, str]) -> Money:
         if play['type'] == "tragedy":
