@@ -15,20 +15,24 @@ class StatementPrinter:
 
         for perf in invoice['performances']:
             play = plays[perf['playID']]
+
             performance_amount = self.compute_performance_amount(perf, play)
+            performance_credits = self.compute_performance_credits(perf, play)
 
-            extra_credits_by_audience = Credits(max(perf['audience'] - 30, 0))
-            self.credits = self.credits.add(extra_credits_by_audience)
+            self.credits = self.credits.add(performance_credits)
+            self.money = self.money.add(performance_amount)
 
-            extra_credits_by_genre = self.extra_credits_by_genre(perf, play)
-            self.credits = self.credits.add(extra_credits_by_genre)
             # print line for this order
             result += f' {play["name"]}: {performance_amount.as_dollar()} ({perf["audience"]} seats)\n'
-            self.money = self.money.add(performance_amount)
 
         result += f'Amount owed is {self.money.as_dollar()}\n'
         result += f'You earned {self.credits} credits\n'
         return result
+
+    def compute_performance_credits(self, perf, play):
+        performance_credits = Credits(max(perf['audience'] - 30, 0))
+        performance_credits = performance_credits.add(self.extra_credits_by_genre(perf, play))
+        return performance_credits
 
     @staticmethod
     def extra_credits_by_genre(perf: dict[str, str | int], play: dict[str, str]) -> Credits:
