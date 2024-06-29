@@ -7,8 +7,8 @@ from src.theatrical_player.money import Money
 class StatementPrinter:
 
     def __init__(self) -> None:
-        self.money = Money(initial_amount=0)
-        self.credits = Credits(initial_credits=0)
+        self.invoice_money = Money(initial_amount=0)
+        self.invoice_credits = Credits(initial_credits=0)
 
     def print(self, invoice, plays):
         result = f'Statement for {invoice["customer"]}\n'
@@ -19,14 +19,14 @@ class StatementPrinter:
             performance_amount = self.compute_performance_amount(perf, play)
             performance_credits = self.compute_performance_credits(perf, play)
 
-            self.credits = self.credits.add(performance_credits)
-            self.money = self.money.add(performance_amount)
+            self.invoice_credits = self.invoice_credits.add(performance_credits)
+            self.invoice_money = self.invoice_money.add(performance_amount)
 
             # print line for this order
             result += f' {play["name"]}: {performance_amount.as_dollar()} ({perf["audience"]} seats)\n'
 
-        result += f'Amount owed is {self.money.as_dollar()}\n'
-        result += f'You earned {self.credits} credits\n'
+        result += f'Amount owed is {self.invoice_money.as_dollar()}\n'
+        result += f'You earned {self.invoice_credits} credits\n'
         return result
 
     def compute_performance_credits(self, perf, play):
