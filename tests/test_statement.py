@@ -1,16 +1,11 @@
-import json
 import unittest
 
 from approvaltests import verify
 
+from src.theatrical_player.performance import Performance
 from src.theatrical_player.play import Play
 from src.theatrical_player.statement import StatementPrinter
 from tests.conftest import IntelliJDiffReporter
-
-
-def open_json_at(file_path: str) -> str:
-    with open(file_path, 'r') as file:
-        return json.loads(file.read())
 
 
 class TestStatement(unittest.TestCase):
@@ -20,7 +15,14 @@ class TestStatement(unittest.TestCase):
         self.intellij_diff_reporter = IntelliJDiffReporter()
 
     def test_can_produce_invoice_with_valid_plays(self):
-        invoice = open_json_at("tests/test_files/invoice.json")
+        invoice = {
+            "customer": "BigCo",
+            "performances": [
+                Performance("hamlet", 55),
+                Performance("as-like", 35),
+                Performance("othello", 40)
+            ]
+        }
         plays = {
             "hamlet": Play("Hamlet", "tragedy"),
             "as-like": Play("As You Like It", "comedy"),
@@ -33,7 +35,13 @@ class TestStatement(unittest.TestCase):
         )
 
     def test_cannot_produce_invoice_of_unknown_plays_type(self):
-        invoice = open_json_at("tests/test_files/invoice_new_plays.json")
+        invoice = {
+            "customer": "BigCoII",
+            "performances": [
+                Performance("henry-v", 53),
+                Performance("as-like", 55)
+            ]
+        }
         plays = {
             "henry-v": Play("Henry V", "history"),
             "as-like": Play("As You Like It", "pastoral")
