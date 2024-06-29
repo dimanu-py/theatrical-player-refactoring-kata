@@ -18,43 +18,43 @@ class StatementPrinter:
             play = plays[perf['playID']]
             performance_play = Play(name=play["name"], genre=play["type"])
 
-            performance_amount = self.compute_performance_amount(perf, play)
-            performance_credits = self.compute_performance_credits(perf, play)
+            performance_amount = self.compute_performance_amount(perf, performance_play)
+            performance_credits = self.compute_performance_credits(perf, performance_play)
 
             self.invoice_credits = self.invoice_credits.add(performance_credits)
             self.invoice_money = self.invoice_money.add(performance_amount)
 
             # print line for this order
-            result += f' {play["name"]}: {performance_amount.as_dollar()} ({perf["audience"]} seats)\n'
+            result += f' {performance_play.name}: {performance_amount.as_dollar()} ({perf["audience"]} seats)\n'
 
         result += f'Amount owed is {self.invoice_money.as_dollar()}\n'
         result += f'You earned {self.invoice_credits} credits\n'
         return result
 
-    def compute_performance_credits(self, perf, play):
+    def compute_performance_credits(self, perf: dict[str, str | int], play: Play) -> Credits:
         performance_credits = Credits(max(perf['audience'] - 30, 0))
         performance_credits = performance_credits.add(self.extra_credits_by_genre(perf, play))
         return performance_credits
 
     @staticmethod
-    def extra_credits_by_genre(perf: dict[str, str | int], play: dict[str, str]) -> Credits:
-        if "comedy" == play["type"]:
+    def extra_credits_by_genre(perf: dict[str, str | int], play: Play) -> Credits:
+        if "comedy" == play.genre:
             return Credits(math.floor(perf['audience'] / 5))
         return Credits(0)
 
-    def compute_performance_amount(self, perf: dict[str, str | int], play: dict[str, str]) -> Money:
-        if play['type'] == "tragedy":
+    def compute_performance_amount(self, perf: dict[str, str | int], play: Play) -> Money:
+        if play.genre == "tragedy":
             performance_amount = Money(40000)
             performance_amount = performance_amount.add(self.tragedy_extra_amount_by_audience(perf))
             return performance_amount
 
-        if play['type'] == "comedy":
+        if play.genre == "comedy":
             performance_amount = Money(30000)
             performance_amount = performance_amount.add(self.comedy_extra_amount_by_audience(perf))
             performance_amount = performance_amount.add(self.comedy_extra_amount_by_genre(perf))
             return performance_amount
 
-        raise ValueError(f'unknown type: {play["type"]}')
+        raise ValueError(f'unknown type: {play.genre}')
 
     @staticmethod
     def comedy_extra_amount_by_genre(perf: dict[str, str | int]) -> Money:
