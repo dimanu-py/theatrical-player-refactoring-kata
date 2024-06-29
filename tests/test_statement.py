@@ -2,6 +2,7 @@ import unittest
 
 from approvaltests import verify
 
+from src.theatrical_player.invoice import Invoice
 from src.theatrical_player.performance import Performance
 from src.theatrical_player.play import Play
 from src.theatrical_player.statement import StatementPrinter
@@ -26,6 +27,8 @@ class TestStatement(unittest.TestCase):
             "as-like": Play("As You Like It", "comedy"),
             "othello": Play("Othello", "tragedy")
         }
+
+        invoice = Invoice(customer=self.CUSTOMER, performances=performances)
         invoice = {
             "customer": self.CUSTOMER,
             "performances": performances
@@ -45,6 +48,8 @@ class TestStatement(unittest.TestCase):
             "henry-v": Play("Henry V", "history"),
             "as-like": Play("As You Like It", "pastoral")
         }
+
+        invoice = Invoice(customer=self.CUSTOMER, performances=performances)
         invoice = {
             "customer": self.CUSTOMER,
             "performances": performances
