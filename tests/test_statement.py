@@ -9,6 +9,7 @@ from tests.conftest import IntelliJDiffReporter
 
 
 class TestStatement(unittest.TestCase):
+    CUSTOMER = "BigCo"
 
     def setUp(self):
         self.statement_printer = StatementPrinter()
@@ -16,7 +17,7 @@ class TestStatement(unittest.TestCase):
 
     def test_can_produce_invoice_with_valid_plays(self):
         invoice = {
-            "customer": "BigCo",
+            "customer": self.CUSTOMER,
             "performances": [
                 Performance("hamlet", 55),
                 Performance("as-like", 35),
@@ -36,7 +37,7 @@ class TestStatement(unittest.TestCase):
 
     def test_cannot_produce_invoice_of_unknown_plays_type(self):
         invoice = {
-            "customer": "BigCoII",
+            "customer": self.CUSTOMER,
             "performances": [
                 Performance("henry-v", 53),
                 Performance("as-like", 55)
