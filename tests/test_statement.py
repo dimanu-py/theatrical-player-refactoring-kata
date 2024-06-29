@@ -29,10 +29,6 @@ class TestStatement(unittest.TestCase):
         }
 
         invoice = Invoice(customer=self.CUSTOMER, performances=performances)
-        invoice = {
-            "customer": self.CUSTOMER,
-            "performances": performances
-        }
 
         verify(
             self.statement_printer.print(invoice, plays),
@@ -50,10 +46,6 @@ class TestStatement(unittest.TestCase):
         }
 
         invoice = Invoice(customer=self.CUSTOMER, performances=performances)
-        invoice = {
-            "customer": self.CUSTOMER,
-            "performances": performances
-        }
 
         with self.assertRaises(ValueError) as exception_info:
             self.statement_printer.print(invoice, plays)

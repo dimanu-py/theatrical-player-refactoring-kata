@@ -1,6 +1,7 @@
 import math
 
 from src.theatrical_player.credits import Credits
+from src.theatrical_player.invoice import Invoice
 from src.theatrical_player.money import Money
 from src.theatrical_player.performance import Performance
 from src.theatrical_player.play import Play
@@ -12,10 +13,10 @@ class StatementPrinter:
         self.invoice_money = Money(initial_amount=0)
         self.invoice_credits = Credits(initial_credits=0)
 
-    def print(self, invoice: dict[str, str | Performance], plays: dict[str, Play]):
-        result = f'Statement for {invoice["customer"]}\n'
+    def print(self, invoice: Invoice, plays: dict[str, Play]):
+        result = f'Statement for {invoice.customer}\n'
 
-        for performance in invoice['performances']:
+        for performance in invoice.performances:
             play = plays.get(performance.play_id)
 
             performance_amount = self.compute_performance_amount(performance, play)
