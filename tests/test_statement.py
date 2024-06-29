@@ -16,18 +16,19 @@ class TestStatement(unittest.TestCase):
         self.intellij_diff_reporter = IntelliJDiffReporter()
 
     def test_can_produce_invoice_with_valid_plays(self):
-        invoice = {
-            "customer": self.CUSTOMER,
-            "performances": [
-                Performance("hamlet", 55),
-                Performance("as-like", 35),
-                Performance("othello", 40)
-            ]
-        }
+        performances = [
+            Performance("hamlet", 55),
+            Performance("as-like", 35),
+            Performance("othello", 40)
+        ]
         plays = {
             "hamlet": Play("Hamlet", "tragedy"),
             "as-like": Play("As You Like It", "comedy"),
             "othello": Play("Othello", "tragedy")
+        }
+        invoice = {
+            "customer": self.CUSTOMER,
+            "performances": performances
         }
 
         verify(
@@ -36,16 +37,17 @@ class TestStatement(unittest.TestCase):
         )
 
     def test_cannot_produce_invoice_of_unknown_plays_type(self):
-        invoice = {
-            "customer": self.CUSTOMER,
-            "performances": [
-                Performance("henry-v", 53),
-                Performance("as-like", 55)
-            ]
-        }
+        performances = [
+            Performance("henry-v", 53),
+            Performance("as-like", 55)
+        ]
         plays = {
             "henry-v": Play("Henry V", "history"),
             "as-like": Play("As You Like It", "pastoral")
+        }
+        invoice = {
+            "customer": self.CUSTOMER,
+            "performances": performances
         }
 
         with self.assertRaises(ValueError) as exception_info:
