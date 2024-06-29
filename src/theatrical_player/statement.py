@@ -21,10 +21,7 @@ class StatementPrinter:
             elif play['type'] == "comedy":
                 performance_amount = Money(30000)
                 performance_amount = performance_amount.add(self.comedy_extra_amount_by_audience(perf))
-
-                comedy_extra_amount = Money(300 * perf['audience'])
-                performance_amount = performance_amount.add(comedy_extra_amount)
-
+                performance_amount = performance_amount.add(self.comedy_extra_amount_by_genre(perf))
             else:
                 raise ValueError(f'unknown type: {play["type"]}')
 
@@ -41,6 +38,10 @@ class StatementPrinter:
         result += f'Amount owed is {self.money.as_dollar()}\n'
         result += f'You earned {self.credits} credits\n'
         return result
+
+    @staticmethod
+    def comedy_extra_amount_by_genre(perf: dict[str, str | int]) -> Money:
+        return Money(300 * perf['audience'])
 
     @staticmethod
     def comedy_extra_amount_by_audience(perf: dict[str, str | int]) -> Money:
