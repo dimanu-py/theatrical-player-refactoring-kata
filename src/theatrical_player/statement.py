@@ -15,15 +15,7 @@ class StatementPrinter:
 
         for perf in invoice['performances']:
             play = plays[perf['playID']]
-            if play['type'] == "tragedy":
-                performance_amount = Money(40000)
-                performance_amount = performance_amount.add(self.tragedy_extra_amount_by_audience(perf))
-            elif play['type'] == "comedy":
-                performance_amount = Money(30000)
-                performance_amount = performance_amount.add(self.comedy_extra_amount_by_audience(perf))
-                performance_amount = performance_amount.add(self.comedy_extra_amount_by_genre(perf))
-            else:
-                raise ValueError(f'unknown type: {play["type"]}')
+            performance_amount = self.compute_performance_amount(perf, play)
 
             extra_credits_by_audience = Credits(max(perf['audience'] - 30, 0))
             self.credits = self.credits.add(extra_credits_by_audience)
@@ -38,6 +30,20 @@ class StatementPrinter:
         result += f'Amount owed is {self.money.as_dollar()}\n'
         result += f'You earned {self.credits} credits\n'
         return result
+
+    def compute_performance_amount(self, perf: dict[str, str | int], play: dict[str, str]) -> Money:
+        if play['type'] == "tragedy":
+            performance_amount = Money(40000)
+            performance_amount = performance_amount.add(self.tragedy_extra_amount_by_audience(perf))
+            return performance_amount
+
+        if play['type'] == "comedy":
+            performance_amount = Money(30000)
+            performance_amount = performance_amount.add(self.comedy_extra_amount_by_audience(perf))
+            performance_amount = performance_amount.add(self.comedy_extra_amount_by_genre(perf))
+            return performance_amount
+
+        raise ValueError(f'unknown type: {play["type"]}')
 
     @staticmethod
     def comedy_extra_amount_by_genre(perf: dict[str, str | int]) -> Money:
