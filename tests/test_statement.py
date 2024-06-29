@@ -3,7 +3,7 @@ import unittest
 
 from approvaltests import verify
 
-from src.theatrical_player.statement import statement_printer
+from src.theatrical_player.statement import StatementPrinter
 from tests.conftest import IntelliJDiffReporter
 
 
@@ -15,6 +15,7 @@ def open_json_at(file_path: str) -> str:
 class TestStatement(unittest.TestCase):
 
     def setUp(self):
+        self.statement_printer = StatementPrinter()
         self.intellij_diff_reporter = IntelliJDiffReporter()
 
     def test_can_produce_invoice_with_valid_plays(self):
@@ -22,7 +23,7 @@ class TestStatement(unittest.TestCase):
         plays = open_json_at("tests/test_files/plays.json")
 
         verify(
-            statement_printer(invoice, plays),
+            self.statement_printer.print(invoice, plays),
             reporter=self.intellij_diff_reporter
         )
 
@@ -31,5 +32,5 @@ class TestStatement(unittest.TestCase):
         plays = open_json_at("tests/test_files/new_plays.json")
 
         with self.assertRaises(ValueError) as exception_info:
-            statement_printer(invoice, plays)
-        assert "unknown type" in str(exception_info.exception)
+            self.statement_printer.print(invoice, plays)
+        self.assertIn("unknown type", str(exception_info.exception))
