@@ -44,11 +44,11 @@ def statement_printer(invoice, plays):
             comedy_extra_credits = Credits(math.floor(perf['audience'] / 5))
             invoice_credits = invoice_credits.add(comedy_extra_credits)
         # print line for this order
-        result += f' {play["name"]}: {format_as_dollars(this_amount/100)} ({perf["audience"]} seats)\n'
+        result += f' {play["name"]}: {performance_amount.as_dollar()} ({perf["audience"]} seats)\n'
         total_amount += this_amount
         invoice_amount = invoice_amount.add(performance_amount)
 
-    result += f'Amount owed is {format_as_dollars(total_amount/100)}\n'
+    result += f'Amount owed is {invoice_amount.as_dollar()}\n'
     result += f'You earned {invoice_credits} credits\n'
     return result
 
