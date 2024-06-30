@@ -18,7 +18,7 @@ class StatementPrinter:
             play = catalog.by_id(performance.play_id)
 
             performance_amount = self.compute_performance_amount(performance, play)
-            performance_credits = self.compute_performance_credits(performance, play)
+            performance_credits = performance.compute_credits(play)
 
             self.invoice_credits = self.invoice_credits.add(performance_credits)
             self.invoice_money = self.invoice_money.add(performance_amount)
@@ -29,11 +29,6 @@ class StatementPrinter:
         result += f'Amount owed is {self.invoice_money.as_dollar()}\n'
         result += f'You earned {self.invoice_credits} credits\n'
         return result
-
-    def compute_performance_credits(self, performance: Performance, play: Play) -> Credits:
-        performance_credits = Credits(max(performance.audience - 30, 0))
-        performance_credits = performance_credits.add(performance.extra_credits_by_genre(play))
-        return performance_credits
 
     def compute_performance_amount(self, performance: Performance, play: Play) -> Money:
         if play.genre == "tragedy":

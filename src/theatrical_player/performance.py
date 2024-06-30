@@ -11,7 +11,11 @@ class Performance:
         self.play_id = play_id
         self.audience = audience
 
-    def extra_credits_by_genre(self, play: Play) -> Credits:
+    def compute_credits(self, play: Play) -> Credits:
+        initial_credits = Credits(max(self.audience - 30, 0))
+        return initial_credits.add(self._extra_credits_by_genre(play))
+
+    def _extra_credits_by_genre(self, play: Play) -> Credits:
         if "comedy" == play.genre:
             return Credits(math.floor(self.audience / 5))
         return Credits(0)
@@ -19,8 +23,8 @@ class Performance:
 
 class PerformancesRepository:
 
+
     def __init__(self, performances: list[Performance]) -> None:
         self.performances = performances
-
     def __iter__(self) -> Iterable[Performance]:
         return iter(self.performances)
