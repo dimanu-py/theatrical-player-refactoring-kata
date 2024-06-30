@@ -4,7 +4,7 @@ from approvaltests import verify
 
 from src.theatrical_player.invoice import Invoice
 from src.theatrical_player.performance import Performance, PerformancesRepository
-from src.theatrical_player.play import Play
+from src.theatrical_player.play import Play, PlaysCatalog
 from src.theatrical_player.statement import StatementPrinter
 from tests.conftest import IntelliJDiffReporter
 
@@ -27,10 +27,11 @@ class TestStatement(unittest.TestCase):
             "as-like": Play("As You Like It", "comedy"),
             "othello": Play("Othello", "tragedy")
         }
+        catalog = PlaysCatalog(plays)
         invoice = Invoice(customer=self.CUSTOMER, performances=performances)
 
         verify(
-            self.statement_printer.print(invoice, plays),
+            self.statement_printer.print(invoice, plays, catalog),
             reporter=self.intellij_diff_reporter
         )
 
@@ -43,8 +44,9 @@ class TestStatement(unittest.TestCase):
             Performance("henry-v", 53),
             Performance("as-like", 55)
         ])
+        catalog = PlaysCatalog(plays)
         invoice = Invoice(customer=self.CUSTOMER, performances=performances)
 
         with self.assertRaises(ValueError) as exception_info:
-            self.statement_printer.print(invoice, plays)
+            self.statement_printer.print(invoice, plays, catalog)
         self.assertIn("unknown type", str(exception_info.exception))

@@ -4,7 +4,7 @@ from src.theatrical_player.credits import Credits
 from src.theatrical_player.invoice import Invoice
 from src.theatrical_player.money import Money
 from src.theatrical_player.performance import Performance
-from src.theatrical_player.play import Play
+from src.theatrical_player.play import Play, PlaysCatalog
 
 
 class StatementPrinter:
@@ -13,7 +13,7 @@ class StatementPrinter:
         self.invoice_money = Money(initial_amount=0)
         self.invoice_credits = Credits(initial_credits=0)
 
-    def print(self, invoice: Invoice, plays: dict[str, Play]):
+    def print(self, invoice: Invoice, plays: dict[str, Play], catalog: PlaysCatalog = None):
         result = f'Statement for {invoice.customer}\n'
 
         for performance in invoice.performances:
