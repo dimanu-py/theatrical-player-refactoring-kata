@@ -16,14 +16,11 @@ class StatementPrinter:
         for performance in invoice.performances:
             play = catalog.by_id(performance.play_id)
 
-            performance_amount = performance.compute_amount(play)
-            performance_credits = performance.compute_credits(play)
-
-            self.invoice_credits = self.invoice_credits.add(performance_credits)
-            self.invoice_money = self.invoice_money.add(performance_amount)
+            self.invoice_credits = self.invoice_credits.add(performance.credits(play))
+            self.invoice_money = self.invoice_money.add(performance.amount(play))
 
             # print line for this order
-            result += f' {play.name}: {performance_amount.as_dollar()} ({performance.audience} seats)\n'
+            result += f' {play.name}: {performance.amount(play).as_dollar()} ({performance.audience} seats)\n'
 
         result += f'Amount owed is {self.invoice_money.as_dollar()}\n'
         result += f'You earned {self.invoice_credits} credits\n'

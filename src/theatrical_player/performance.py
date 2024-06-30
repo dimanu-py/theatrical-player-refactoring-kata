@@ -12,11 +12,11 @@ class Performance:
         self.play_id = play_id
         self.audience = audience
 
-    def compute_credits(self, play: Play) -> Credits:
+    def credits(self, play: Play) -> Credits:
         initial_credits = Credits(max(self.audience - 30, 0))
         return initial_credits.add(self._extra_credits_by_genre(play))
 
-    def compute_amount(self, play: Play) -> Money:
+    def amount(self, play: Play) -> Money:
         if play.genre == "tragedy":
             performance_amount = Money(40000)
             performance_amount = performance_amount.add(self._tragedy_extra_amount_by_audience())
