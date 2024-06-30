@@ -32,31 +32,25 @@ class Performance:
         raise ValueError(f'unknown type: {play.genre}')
 
     def _extra_credits_by_genre(self, play: Play) -> Credits:
-        if "comedy" == play.genre:
-            return Credits(math.floor(self.audience / 5))
-        return Credits(0)
+        return Credits(math.floor(self.audience / 5)) if play.genre == "comedy" else Credits(0)
 
     def _comedy_extra_amount(self) -> Money:
         return Money(300 * self.audience)
 
     def _comedy_extra_amount_by_audience(self) -> Money:
-        if self.audience > 20:
-            return Money(10000 + 500 * (self.audience - 20))
-        return Money(0)
+        return Money(10000 + 500 * (self.audience - 20)) if self.audience > 20 else Money(0)
 
     def _tragedy_extra_amount(self) -> Money:
         return Money(0)
 
     def _tragedy_extra_amount_by_audience(self) -> Money:
-        if self.audience > 30:
-            return Money(1000 * (self.audience - 30))
-        return Money(0)
+        return Money(1000 * (self.audience - 30)) if self.audience > 30 else Money(0)
 
 
 class PerformancesRepository:
 
-
     def __init__(self, performances: list[Performance]) -> None:
         self.performances = performances
+
     def __iter__(self) -> Iterable[Performance]:
         return iter(self.performances)
