@@ -34,19 +34,18 @@ class StatementPrinter:
         if play.genre == "tragedy":
             performance_amount = Money(40000)
             performance_amount = performance_amount.add(self.tragedy_extra_amount_by_audience(performance))
+            performance_amount = performance_amount.add(performance.comedy_extra_amount())
+            performance_amount = performance_amount.add(performance.tragedy_extra_amount())
             return performance_amount
 
         if play.genre == "comedy":
             performance_amount = Money(30000)
             performance_amount = performance_amount.add(self.comedy_extra_amount_by_audience(performance))
-            performance_amount = performance_amount.add(self.comedy_extra_amount_by_genre(performance))
+            performance_amount = performance_amount.add(performance.tragedy_extra_amount())
+            performance_amount = performance_amount.add(performance.comedy_extra_amount())
             return performance_amount
 
         raise ValueError(f'unknown type: {play.genre}')
-
-    @staticmethod
-    def comedy_extra_amount_by_genre(performance: Performance) -> Money:
-        return Money(300 * performance.audience)
 
     @staticmethod
     def comedy_extra_amount_by_audience(performance: Performance) -> Money:

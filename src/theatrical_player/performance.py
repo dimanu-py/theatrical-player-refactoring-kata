@@ -2,6 +2,7 @@ import math
 from typing import Iterable
 
 from src.theatrical_player.credits import Credits
+from src.theatrical_player.money import Money
 from src.theatrical_player.play import Play
 
 
@@ -19,6 +20,12 @@ class Performance:
         if "comedy" == play.genre:
             return Credits(math.floor(self.audience / 5))
         return Credits(0)
+
+    def comedy_extra_amount(self) -> Money:
+        return Money(300 * self.audience)
+
+    def tragedy_extra_amount(self) -> Money:
+        return Money(0)
 
 
 class PerformancesRepository:
