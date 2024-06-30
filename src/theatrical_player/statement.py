@@ -13,11 +13,11 @@ class StatementPrinter:
         self.invoice_money = Money(initial_amount=0)
         self.invoice_credits = Credits(initial_credits=0)
 
-    def print(self, invoice: Invoice, plays: dict[str, Play], catalog: PlaysCatalog = None):
+    def print(self, invoice: Invoice, catalog: PlaysCatalog):
         result = f'Statement for {invoice.customer}\n'
 
         for performance in invoice.performances:
-            play = plays.get(performance.play_id)
+            play = catalog.by_id(performance.play_id)
 
             performance_amount = self.compute_performance_amount(performance, play)
             performance_credits = self.compute_performance_credits(performance, play)
