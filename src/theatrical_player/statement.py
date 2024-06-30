@@ -1,5 +1,3 @@
-import math
-
 from src.theatrical_player.credits import Credits
 from src.theatrical_player.invoice import Invoice
 from src.theatrical_player.money import Money
@@ -34,14 +32,8 @@ class StatementPrinter:
 
     def compute_performance_credits(self, performance: Performance, play: Play) -> Credits:
         performance_credits = Credits(max(performance.audience - 30, 0))
-        performance_credits = performance_credits.add(self.extra_credits_by_genre(performance, play))
+        performance_credits = performance_credits.add(performance.extra_credits_by_genre(play))
         return performance_credits
-
-    @staticmethod
-    def extra_credits_by_genre(performance: Performance, play: Play) -> Credits:
-        if "comedy" == play.genre:
-            return Credits(math.floor(performance.audience / 5))
-        return Credits(0)
 
     def compute_performance_amount(self, performance: Performance, play: Play) -> Money:
         if play.genre == "tragedy":
