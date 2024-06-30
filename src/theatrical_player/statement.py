@@ -14,15 +14,14 @@ class StatementPrinter:
         result = f'Statement for {invoice.customer}\n'
 
         for performance in invoice.performances:
-            play = catalog.by_id(performance.play_id)
 
+            play = catalog.by_id(performance.play_id)
             self.invoice_credits = self.invoice_credits.add(performance.credits(play))
             self.invoice_money = self.invoice_money.add(performance.amount(play))
 
-            # print line for this order
-            result += f' {play.name}: {performance.amount(play).as_dollar()} ({performance.audience} seats)\n'
+            performance_result = f' {play.name}: {performance.amount(play).as_dollar()} ({performance.audience} seats)\n'
+            result += performance_result
 
         result += f'Amount owed is {self.invoice_money.as_dollar()}\n'
         result += f'You earned {self.invoice_credits} credits\n'
         return result
-
