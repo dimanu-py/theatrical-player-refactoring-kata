@@ -16,23 +16,38 @@ class Performance:
         initial_credits = Credits(max(self.audience - 30, 0))
         return initial_credits.add(self._extra_credits_by_genre(play))
 
+    def compute_amount(self, play: Play) -> Money:
+        if play.genre == "tragedy":
+            performance_amount = Money(40000)
+            performance_amount = performance_amount.add(self._tragedy_extra_amount_by_audience())
+            performance_amount = performance_amount.add(self._tragedy_extra_amount())
+            return performance_amount
+
+        if play.genre == "comedy":
+            performance_amount = Money(30000)
+            performance_amount = performance_amount.add(self._comedy_extra_amount_by_audience())
+            performance_amount = performance_amount.add(self._comedy_extra_amount())
+            return performance_amount
+
+        raise ValueError(f'unknown type: {play.genre}')
+
     def _extra_credits_by_genre(self, play: Play) -> Credits:
         if "comedy" == play.genre:
             return Credits(math.floor(self.audience / 5))
         return Credits(0)
 
-    def comedy_extra_amount(self) -> Money:
+    def _comedy_extra_amount(self) -> Money:
         return Money(300 * self.audience)
 
-    def comedy_extra_amount_by_audience(self) -> Money:
+    def _comedy_extra_amount_by_audience(self) -> Money:
         if self.audience > 20:
             return Money(10000 + 500 * (self.audience - 20))
         return Money(0)
 
-    def tragedy_extra_amount(self) -> Money:
+    def _tragedy_extra_amount(self) -> Money:
         return Money(0)
 
-    def tragedy_extra_amount_by_audience(self) -> Money:
+    def _tragedy_extra_amount_by_audience(self) -> Money:
         if self.audience > 30:
             return Money(1000 * (self.audience - 30))
         return Money(0)
