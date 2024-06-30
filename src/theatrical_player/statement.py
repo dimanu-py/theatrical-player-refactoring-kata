@@ -33,28 +33,15 @@ class StatementPrinter:
     def compute_performance_amount(self, performance: Performance, play: Play) -> Money:
         if play.genre == "tragedy":
             performance_amount = Money(40000)
-            performance_amount = performance_amount.add(self.tragedy_extra_amount_by_audience(performance))
-            performance_amount = performance_amount.add(performance.comedy_extra_amount())
+            performance_amount = performance_amount.add(performance.tragedy_extra_amount_by_audience())
             performance_amount = performance_amount.add(performance.tragedy_extra_amount())
             return performance_amount
 
         if play.genre == "comedy":
             performance_amount = Money(30000)
-            performance_amount = performance_amount.add(self.comedy_extra_amount_by_audience(performance))
-            performance_amount = performance_amount.add(performance.tragedy_extra_amount())
+            performance_amount = performance_amount.add(performance.comedy_extra_amount_by_audience())
             performance_amount = performance_amount.add(performance.comedy_extra_amount())
             return performance_amount
 
         raise ValueError(f'unknown type: {play.genre}')
 
-    @staticmethod
-    def comedy_extra_amount_by_audience(performance: Performance) -> Money:
-        if performance.audience > 20:
-            return Money(10000 + 500 * (performance.audience - 20))
-        return Money(0)
-
-    @staticmethod
-    def tragedy_extra_amount_by_audience(performance: Performance) -> Money:
-        if performance.audience > 30:
-            return Money(1000 * (performance.audience - 30))
-        return Money(0)

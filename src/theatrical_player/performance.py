@@ -24,7 +24,17 @@ class Performance:
     def comedy_extra_amount(self) -> Money:
         return Money(300 * self.audience)
 
+    def comedy_extra_amount_by_audience(self) -> Money:
+        if self.audience > 20:
+            return Money(10000 + 500 * (self.audience - 20))
+        return Money(0)
+
     def tragedy_extra_amount(self) -> Money:
+        return Money(0)
+
+    def tragedy_extra_amount_by_audience(self) -> Money:
+        if self.audience > 30:
+            return Money(1000 * (self.audience - 30))
         return Money(0)
 
 
