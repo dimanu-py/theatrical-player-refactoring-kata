@@ -34,18 +34,10 @@ class TestStatement(unittest.TestCase):
             reporter=self.intellij_diff_reporter
         )
 
-    @unittest.expectedFailure
     def test_cannot_produce_invoice_of_unknown_plays_type(self):
-        performances = PerformancesRepository([
-            Performance("henry-v", 53),
-            Performance("as-like", 55)
-        ])
-        catalog = PlaysCatalog({
-            "henry-v": Play.create("Henry V", "history"),
-            "as-like": Play.create("As You Like It", "pastoral")
-        })
-        invoice = Invoice(customer=self.CUSTOMER, performances=performances)
-
         with self.assertRaises(ValueError) as exception_info:
-            self.statement_printer.print(invoice, catalog)
+            PlaysCatalog({
+                "henry-v": Play.create("Henry V", "history"),
+                "as-like": Play.create("As You Like It", "pastoral")
+            })
         self.assertIn("unknown type", str(exception_info.exception))
