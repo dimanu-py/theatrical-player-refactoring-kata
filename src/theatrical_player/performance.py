@@ -1,4 +1,3 @@
-import math
 from typing import Iterable
 
 from src.theatrical_player.credits import Credits
@@ -14,7 +13,7 @@ class Performance:
 
     def credits(self, play: Play) -> Credits:
         initial_credits = Credits(max(self.audience - 30, 0))
-        return initial_credits.add(self._extra_credits_by_genre(play))
+        return initial_credits.add(play.extra_credits_by_genre(self.audience))
 
     def amount(self, play: Play) -> Money:
         if play.genre == "tragedy":
@@ -30,9 +29,6 @@ class Performance:
             return performance_amount
 
         raise ValueError(f'unknown type: {play.genre}')
-
-    def _extra_credits_by_genre(self, play: Play) -> Credits:
-        return Credits(math.floor(self.audience / 5)) if play.genre == "comedy" else Credits(0)
 
     def _comedy_extra_amount(self) -> Money:
         return Money(300 * self.audience)
