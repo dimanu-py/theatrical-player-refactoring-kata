@@ -34,18 +34,14 @@ class Comedy(Play):
         return Credits(math.floor(audience / 5))
 
     def cost(self, audience: int) -> Money:
-        performance_amount = Money(30000)
-        performance_amount = performance_amount.add(self._extra_cost_by_audience(audience))
-        performance_amount = performance_amount.add(self._extra_cost(audience))
-        return performance_amount
+        base_cost = Money(30000)
+        return base_cost.add(self._extra_cost_by_audience(audience))
 
     @staticmethod
-    def _extra_cost(audience):
-        return Money(300 * audience)
-
-    @staticmethod
-    def _extra_cost_by_audience(audience):
-        return Money(10000 + 500 * (audience - 20)) if audience > 20 else Money(0)
+    def _extra_cost_by_audience(audience: int) -> Money:
+        always_applied_extra = Money(300 * audience)
+        extra_cost_by_audience = Money(10000 + 500 * (audience - 20)) if audience > 20 else Money(0)
+        return always_applied_extra.add(extra_cost_by_audience)
 
 
 class Tragedy(Play):
@@ -54,12 +50,11 @@ class Tragedy(Play):
         return Credits(0)
 
     def cost(self, audience: int) -> Money:
-        performance_amount = Money(40000)
-        performance_amount = performance_amount.add(self._extra_cost_by_audience(audience))
-        return performance_amount
+        base_cost = Money(40000)
+        return base_cost.add(self._extra_cost_by_audience(audience))
 
     @staticmethod
-    def _extra_cost_by_audience(audience):
+    def _extra_cost_by_audience(audience: int) -> Money:
         return Money(1000 * (audience - 30)) if audience > 30 else Money(0)
 
 
