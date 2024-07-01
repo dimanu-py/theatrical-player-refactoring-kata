@@ -13,6 +13,15 @@ class Play:
     def credits(self, audience: int) -> Credits:
         return Credits(math.floor(audience / 5)) if self.genre == "comedy" else Credits(0)
 
+    def amount(self, audience: int) -> Money:
+        if self.genre == "tragedy":
+            return self.tragedy_amount(audience)
+
+        if self.genre == "comedy":
+            return self.comedy_amount(audience)
+
+        raise ValueError(f'unknown type: {self.genre}')
+
     def comedy_amount(self, audience: int) -> Money:
         performance_amount = Money(30000)
         performance_amount = performance_amount.add(self._comedy_extra_amount_by_audience(audience))

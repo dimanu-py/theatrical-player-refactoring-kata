@@ -16,13 +16,7 @@ class Performance:
         return initial_credits.add(play.credits(self.audience))
 
     def amount(self, play: Play) -> Money:
-        if play.genre == "tragedy":
-            return play.tragedy_amount(self.audience)
-
-        if play.genre == "comedy":
-            return play.comedy_amount(self.audience)
-
-        raise ValueError(f'unknown type: {play.genre}')
+        return play.amount(self.audience)
 
 
 class PerformancesRepository:
