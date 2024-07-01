@@ -17,24 +17,18 @@ class Performance:
 
     def amount(self, play: Play) -> Money:
         if play.genre == "tragedy":
-            performance_amount = Money(40000)
-            performance_amount = performance_amount.add(self._tragedy_extra_amount_by_audience())
-            performance_amount = performance_amount.add(self._tragedy_extra_amount())
-            return performance_amount
+            return self.tragedy_amount()
 
         if play.genre == "comedy":
-            performance_amount = Money(30000)
-            performance_amount = performance_amount.add(self._comedy_extra_amount_by_audience())
-            performance_amount = performance_amount.add(self._comedy_extra_amount())
-            return performance_amount
+            return play.comedy_amount(self.audience)
 
         raise ValueError(f'unknown type: {play.genre}')
 
-    def _comedy_extra_amount(self) -> Money:
-        return Money(300 * self.audience)
-
-    def _comedy_extra_amount_by_audience(self) -> Money:
-        return Money(10000 + 500 * (self.audience - 20)) if self.audience > 20 else Money(0)
+    def tragedy_amount(self) -> Money:
+        performance_amount = Money(40000)
+        performance_amount = performance_amount.add(self._tragedy_extra_amount_by_audience())
+        performance_amount = performance_amount.add(self._tragedy_extra_amount())
+        return performance_amount
 
     def _tragedy_extra_amount(self) -> Money:
         return Money(0)
