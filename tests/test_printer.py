@@ -5,11 +5,11 @@ from approvaltests import verify
 from src.theatrical_player.invoice import Invoice
 from src.theatrical_player.performance import Performance, PerformancesRepository
 from src.theatrical_player.play import Play, PlaysCatalog
-from src.theatrical_player.statement import StatementPrinter
+from src.theatrical_player.printer import StatementPrinter
 from tests.conftest import IntelliJDiffReporter
 
 
-class TestStatement(unittest.TestCase):
+class TestStatementPrinter(unittest.TestCase):
     CUSTOMER = "BigCo"
 
     def setUp(self):
