@@ -15,21 +15,34 @@ class Play:
 
     def comedy_amount(self, audience: int) -> Money:
         performance_amount = Money(30000)
-        performance_amount = performance_amount.add(self._comedy_extra_credits_by_audience(audience))
+        performance_amount = performance_amount.add(self._comedy_extra_amount_by_audience(audience))
         performance_amount = performance_amount.add(self._comedy_extra_amount_by_genre(audience))
         return performance_amount
+
+    def tragedy_amount(self, audience: int) -> Money:
+        performance_amount = Money(40000)
+        performance_amount = performance_amount.add(self._tragedy_extra_amount_by_audience(audience))
+        performance_amount = performance_amount.add(self._tragedy_extra_amount_by_genre())
+        return performance_amount
+
+    @staticmethod
+    def _tragedy_extra_amount_by_genre() -> Money:
+        return Money(0)
+
+    @staticmethod
+    def _tragedy_extra_amount_by_audience(audience):
+        return Money(1000 * (audience - 30)) if audience > 30 else Money(0)
 
     @staticmethod
     def _comedy_extra_amount_by_genre(audience):
         return Money(300 * audience)
 
     @staticmethod
-    def _comedy_extra_credits_by_audience(audience):
+    def _comedy_extra_amount_by_audience(audience):
         return Money(10000 + 500 * (audience - 20)) if audience > 20 else Money(0)
 
 
 class PlaysCatalog:
-
 
     def __init__(self, catalog: dict[str, Play]) -> None:
         self.catalog = catalog
