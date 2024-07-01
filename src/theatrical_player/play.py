@@ -10,6 +10,14 @@ class Play:
         self.name = name
         self.genre = genre
 
+    @classmethod
+    def create(cls, name: str, genre: str) -> 'Play':
+        if genre == "comedy":
+            return Comedy(name, genre)
+        if genre == "tragedy":
+            return Tragedy(name, genre)
+        raise ValueError(f'unknown type: {genre}')
+
     def credits(self, audience: int) -> Credits:
         if self.genre == "comedy":
             comedy = Comedy(self.name, self.genre)
