@@ -1,7 +1,13 @@
 from abc import abstractmethod, ABC
+from enum import StrEnum
 
 from src.theatrical_player.credits import Credits, CreditsCalculationStrategy, AudienceBasedCredits, NoExtraCredits
 from src.theatrical_player.money import Money
+
+
+class Genres(StrEnum):
+    COMEDY = "comedy"
+    TRAGEDY = "tragedy"
 
 
 class Play(ABC):
@@ -14,9 +20,9 @@ class Play(ABC):
 
     @classmethod
     def create(cls, name: str, genre: str) -> 'Play':
-        if genre == "comedy":
+        if genre == Genres.COMEDY:
             return Comedy(name, genre)
-        if genre == "tragedy":
+        if genre == Genres.TRAGEDY:
             return Tragedy(name, genre)
         raise ValueError(f'unknown type: {genre}')
 
