@@ -15,8 +15,8 @@ class Performance:
         initial_credits = Credits(max(self.audience - 30, 0))
         return initial_credits.add(play.credits(self.audience))
 
-    def amount(self, play: Play) -> Money:
-        return play.amount(self.audience)
+    def cost(self, play: Play) -> Money:
+        return play.cost(self.audience)
 
 
 class PerformancesRepository:

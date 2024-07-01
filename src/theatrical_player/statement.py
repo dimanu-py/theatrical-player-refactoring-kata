@@ -17,9 +17,9 @@ class StatementPrinter:
 
             play = catalog.by_id(performance.play_id)
             self.invoice_credits = self.invoice_credits.add(performance.credits(play))
-            self.invoice_money = self.invoice_money.add(performance.amount(play))
+            self.invoice_money = self.invoice_money.add(performance.cost(play))
 
-            performance_result = f' {play.name}: {performance.amount(play).as_dollar()} ({performance.audience} seats)\n'
+            performance_result = f' {play.name}: {performance.cost(play).as_dollar()} ({performance.audience} seats)\n'
             result += performance_result
 
         result += f'Amount owed is {self.invoice_money.as_dollar()}\n'
