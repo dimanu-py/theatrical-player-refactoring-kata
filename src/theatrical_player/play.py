@@ -9,7 +9,7 @@ class Play:
         self.name = name
         self.genre = genre
 
-    def extra_credits_by_genre(self, audience: int) -> Credits:
+    def credits(self, audience: int) -> Credits:
         return Credits(math.floor(audience / 5)) if self.genre == "comedy" else Credits(0)
 
 
