@@ -1,15 +1,16 @@
-import math
 from abc import abstractmethod, ABC
 
-from src.theatrical_player.credits import Credits
+from src.theatrical_player.credits import Credits, CreditsCalculationStrategy, AudienceBasedCredits, NoExtraCredits
 from src.theatrical_player.money import Money
 
 
 class Play(ABC):
+    DEFAULT_CREDIT_STRATEGY = NoExtraCredits()
 
     def __init__(self, name: str, genre: str) -> None:
         self.name = name
         self.genre = genre
+        self.credit_strategy: CreditsCalculationStrategy = self.DEFAULT_CREDIT_STRATEGY
 
     @classmethod
     def create(cls, name: str, genre: str) -> 'Play':
@@ -19,9 +20,8 @@ class Play(ABC):
             return Tragedy(name, genre)
         raise ValueError(f'unknown type: {genre}')
 
-    @abstractmethod
     def credits(self, audience: int) -> Credits:
-        """Calculate play's credits"""
+        return self.credit_strategy.credits(audience)
 
     @abstractmethod
     def cost(self, audience: int) -> Money:
@@ -30,8 +30,9 @@ class Play(ABC):
 
 class Comedy(Play):
 
-    def credits(self, audience: int) -> Credits:
-        return Credits(math.floor(audience / 5))
+    def __init__(self, name: str, genre: str) -> None:
+        super().__init__(name, genre)
+        self.credit_strategy = AudienceBasedCredits()
 
     def cost(self, audience: int) -> Money:
         base_cost = Money(30000)
@@ -46,8 +47,9 @@ class Comedy(Play):
 
 class Tragedy(Play):
 
-    def credits(self, audience: int) -> Credits:
-        return Credits(0)
+    def __init__(self, name: str, genre: str) -> None:
+        super().__init__(name, genre)
+        self.credit_strategy = NoExtraCredits()
 
     def cost(self, audience: int) -> Money:
         base_cost = Money(40000)
