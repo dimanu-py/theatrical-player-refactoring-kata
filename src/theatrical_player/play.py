@@ -11,22 +11,21 @@ class Play:
         self.genre = genre
 
     def credits(self, audience: int) -> Credits:
-        return Credits(math.floor(audience / 5)) if self.genre == "comedy" else Credits(0)
+        if self.genre == "comedy":
+            comedy = Comedy(self.name, self.genre)
+            return comedy.comedy_credits(audience)
+
+        return Credits(0)
 
     def cost(self, audience: int) -> Money:
         if self.genre == "tragedy":
             return self.tragedy_cost(audience)
 
         if self.genre == "comedy":
-            return self.comedy_cost(audience)
+            comedy = Comedy(self.name, self.genre)
+            return comedy.comedy_cost(audience)
 
         raise ValueError(f'unknown type: {self.genre}')
-
-    def comedy_cost(self, audience: int) -> Money:
-        performance_amount = Money(30000)
-        performance_amount = performance_amount.add(self._comedy_extra_cost_by_audience(audience))
-        performance_amount = performance_amount.add(self._comedy_extra_cost_by_genre(audience))
-        return performance_amount
 
     def tragedy_cost(self, audience: int) -> Money:
         performance_amount = Money(40000)
@@ -42,6 +41,18 @@ class Play:
     def _tragedy_extra_cost_by_audience(audience):
         return Money(1000 * (audience - 30)) if audience > 30 else Money(0)
 
+
+class Comedy(Play):
+
+    def comedy_credits(self, audience: int) -> Credits:
+        return Credits(math.floor(audience / 5))
+
+    def comedy_cost(self, audience: int) -> Money:
+        performance_amount = Money(30000)
+        performance_amount = performance_amount.add(self._comedy_extra_cost_by_audience(audience))
+        performance_amount = performance_amount.add(self._comedy_extra_cost_by_genre(audience))
+        return performance_amount
+
     @staticmethod
     def _comedy_extra_cost_by_genre(audience):
         return Money(300 * audience)
@@ -55,5 +66,6 @@ class PlaysCatalog:
 
     def __init__(self, catalog: dict[str, Play]) -> None:
         self.catalog = catalog
+
     def by_id(self, play_id: str) -> Play:
         return self.catalog.get(play_id)
