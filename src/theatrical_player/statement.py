@@ -24,6 +24,14 @@ class Statement:
         else:
             raise ValueError(f"Unknown tag: {tag}")
 
+    def print(self) -> str:
+        self.lines += f"Statement for {self.customer}\n"
+        for performance in self.performance:
+            self.lines += f" {performance['name']}: {performance['cost']} ({performance['audience']} seats)\n"
+        self.lines += f"Amount owed is {self.cost}\n"
+        self.lines += f"You earned {self.credits} credits\n"
+        return self.lines
+
     def _fill_cost(self, value: Money) -> None:
         self.cost = value.as_dollar()
 
@@ -41,11 +49,3 @@ class Statement:
                 "audience": audience
             }
         )
-
-    def print(self) -> str:
-        self.lines += f"Statement for {self.customer}\n"
-        for performance in self.performance:
-            self.lines += f" {performance['name']}: {performance['cost']} ({performance['audience']} seats)\n"
-        self.lines += f"Amount owed is {self.cost}\n"
-        self.lines += f"You earned {self.credits} credits\n"
-        return self.lines
