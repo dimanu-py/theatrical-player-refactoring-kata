@@ -14,7 +14,7 @@ class Invoice:
         self._credits: Credits = Credits(initial_credits=0)
 
     def fill(self, statement: Statement, catalog: PlaysCatalog) -> None:
-        statement.fill_customer(self.customer)
+        statement.fill("customer", self.customer)
 
         for performance in self.performances:
             play = catalog.by_id(performance.play_id)
