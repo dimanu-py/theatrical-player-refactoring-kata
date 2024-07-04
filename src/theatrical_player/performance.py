@@ -21,7 +21,14 @@ class Performance:
 
     def fill(self, statement: Statement, catalog: PlaysCatalog) -> None:
         play = catalog.by_id(self.play_id)
-        statement.fill_performance(play.name, self.cost(play), self.audience)
+        statement.fill(
+            "performance",
+            {
+                "name": play.name,
+                "cost": self.cost(play),
+                "audience": self.audience
+            }
+        )
 
 
 class PerformancesRepository:

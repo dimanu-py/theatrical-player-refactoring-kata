@@ -1,3 +1,5 @@
+from typing import Any
+
 from src.theatrical_player.money import Money
 
 
@@ -7,8 +9,8 @@ class Statement:
         self.cost: float = 0.0
         self.credits: int = 0
         self.customer: str = ""
+        self.performance: list[dict[str, Any]] = []
         self.lines: str = ""
-        self.temporary_lines: str = ""
 
     def fill(self, tag: str, value) -> None:
         if tag == "customer":
@@ -17,6 +19,10 @@ class Statement:
             self._fill_credits(value)
         elif tag == "cost":
             self._fill_cost(value)
+        elif tag == "performance":
+            self._fill_performance(value["name"], value["cost"], value["audience"])
+        else:
+            raise ValueError(f"Unknown tag: {tag}")
 
     def _fill_cost(self, value: Money) -> None:
         self.cost = value.as_dollar()
@@ -27,12 +33,19 @@ class Statement:
     def _fill_customer(self, value: str) -> None:
         self.customer = value
 
-    def fill_performance(self, play_name: str, cost: Money, audience: int) -> None:
-        self.lines += f' {play_name}: {cost.as_dollar()} ({audience} seats)\n'
+    def _fill_performance(self, play_name: str, cost: Money, audience: int) -> None:
+        self.performance.append(
+            {
+                "name": play_name,
+                "cost": cost.as_dollar(),
+                "audience": audience
+            }
+        )
 
     def print(self) -> str:
-        self.temporary_lines = f"Statement for {self.customer}\n"
-        temp_result = self.temporary_lines + self.lines
-        self.temporary_lines = f"Amount owed is {self.cost}\n"
-        self.temporary_lines += f"You earned {self.credits} credits\n"
-        return temp_result + self.temporary_lines
+        self.lines += f"Statement for {self.customer}\n"
+        for performance in self.performance:
+            self.lines += f" {performance['name']}: {performance['cost']} ({performance['audience']} seats)\n"
+        self.lines += f"Amount owed is {self.cost}\n"
+        self.lines += f"You earned {self.credits} credits\n"
+        return self.lines
