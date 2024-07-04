@@ -1,8 +1,5 @@
 from src.theatrical_player.credits import Credits
-from src.theatrical_player.invoice import Invoice
 from src.theatrical_player.money import Money
-from src.theatrical_player.performance import Performance
-from src.theatrical_player.play import Play
 
 
 class Statement:
@@ -10,11 +7,11 @@ class Statement:
     def __init__(self) -> None:
         self.lines: str = ""
 
-    def fill_customer(self, invoice: Invoice) -> None:
-        self.lines += f'Statement for {invoice.customer}\n'
+    def fill_customer(self, customer: str) -> None:
+        self.lines += f'Statement for {customer}\n'
 
-    def fill_performance(self, play: Play, performance: Performance) -> None:
-        self.lines += f' {play.name}: {performance.cost(play).as_dollar()} ({performance.audience} seats)\n'
+    def fill_performance(self, play_name: str, cost: Money, audience: int) -> None:
+        self.lines += f' {play_name}: {cost.as_dollar()} ({audience} seats)\n'
 
     def fill_invoice(self, money: Money, credits: Credits) -> None:
         self.lines += f'Amount owed is {money.as_dollar()}\n'
