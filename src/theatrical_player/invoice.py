@@ -20,7 +20,8 @@ class Invoice:
             play = catalog.by_id(performance.play_id)
             statement.fill_performance(play.name, performance.cost(play), performance.audience)
 
-        statement.fill_invoice(self.cost(catalog), self.credits(catalog))
+        statement.fill("cost", self.cost(catalog))
+        statement.fill("credits", self.credits(catalog))
 
     def cost(self, catalog: PlaysCatalog) -> Money:
         for performance in self.performances:
