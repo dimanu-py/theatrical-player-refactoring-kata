@@ -10,8 +10,8 @@ class Invoice:
     def __init__(self, customer: str, performances: PerformancesRepository) -> None:
         self.customer = customer
         self.performances = performances
-        self.invoice_money: Money = Money(initial_amount=0)
-        self.invoice_credits: Credits = Credits(initial_credits=0)
+        self._cost: Money = Money(initial_amount=0)
+        self._credits: Credits = Credits(initial_credits=0)
 
     def fill(self, statement: Statement, catalog: PlaysCatalog) -> None:
         statement.fill_customer(self.customer)
@@ -20,16 +20,16 @@ class Invoice:
             play = catalog.by_id(performance.play_id)
             statement.fill_performance(play.name, performance.cost(play), performance.audience)
 
-        statement.fill_invoice(self._cost(catalog), self._credits(catalog))
+        statement.fill_invoice(self.cost(catalog), self.credits(catalog))
 
-    def _cost(self, catalog: PlaysCatalog) -> Money:
+    def cost(self, catalog: PlaysCatalog) -> Money:
         for performance in self.performances:
             play = catalog.by_id(performance.play_id)
-            self.invoice_money = self.invoice_money.add(performance.cost(play))
-        return self.invoice_money
+            self._cost = self._cost.add(performance.cost(play))
+        return self._cost
 
-    def _credits(self, catalog: PlaysCatalog) -> Credits:
+    def credits(self, catalog: PlaysCatalog) -> Credits:
         for performance in self.performances:
             play = catalog.by_id(performance.play_id)
-            self.invoice_credits = self.invoice_credits.add(performance.credits(play))
-        return self.invoice_credits
+            self._credits = self._credits.add(performance.credits(play))
+        return self._credits
