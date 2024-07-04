@@ -18,13 +18,18 @@ class Invoice:
 
         for performance in self.performances:
             play = catalog.by_id(performance.play_id)
-            self.invoice_credits = self.invoice_credits.add(performance.credits(play))
             statement.fill_performance(play.name, performance.cost(play), performance.audience)
 
-        statement.fill_invoice(self._cost(catalog), self.invoice_credits)
+        statement.fill_invoice(self._cost(catalog), self._credits(catalog))
 
     def _cost(self, catalog: PlaysCatalog) -> Money:
         for performance in self.performances:
             play = catalog.by_id(performance.play_id)
             self.invoice_money = self.invoice_money.add(performance.cost(play))
         return self.invoice_money
+
+    def _credits(self, catalog: PlaysCatalog) -> Credits:
+        for performance in self.performances:
+            play = catalog.by_id(performance.play_id)
+            self.invoice_credits = self.invoice_credits.add(performance.credits(play))
+        return self.invoice_credits
