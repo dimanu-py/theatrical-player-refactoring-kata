@@ -3,6 +3,7 @@ from typing import Iterable
 from src.theatrical_player.credits import Credits
 from src.theatrical_player.money import Money
 from src.theatrical_player.play import Play
+from src.theatrical_player.statement import Statement
 
 
 class Performance:
@@ -17,6 +18,9 @@ class Performance:
 
     def cost(self, play: Play) -> Money:
         return play.cost(self.audience)
+
+    def fill(self, statement: Statement, play: Play) -> None:
+        statement.fill_performance(play.name, self.cost(play), self.audience)
 
 
 class PerformancesRepository:
