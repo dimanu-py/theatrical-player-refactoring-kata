@@ -2,7 +2,7 @@ from src.theatrical_player.credits import Credits
 from src.theatrical_player.money import Money
 from src.theatrical_player.performance import PerformancesRepository
 from src.theatrical_player.play import PlaysCatalog
-from src.theatrical_player.statement import Statement
+from src.theatrical_player.statement import Fillable
 
 
 class Invoice:
@@ -13,14 +13,14 @@ class Invoice:
         self._cost: Money = Money(initial_amount=0)
         self._credits: Credits = Credits(initial_credits=0)
 
-    def fill(self, statement: Statement, catalog: PlaysCatalog) -> None:
-        statement.fill("customer", self.customer)
+    def fill(self, fillable: Fillable, catalog: PlaysCatalog) -> None:
+        fillable.fill("customer", self.customer)
 
         for performance in self.performances:
-            performance.fill(statement, catalog)
+            performance.fill(fillable, catalog)
 
-        statement.fill("cost", self.cost(catalog))
-        statement.fill("credits", self.credits(catalog))
+        fillable.fill("cost", self.cost(catalog))
+        fillable.fill("credits", self.credits(catalog))
 
     def cost(self, catalog: PlaysCatalog) -> Money:
         for performance in self.performances:

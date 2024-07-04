@@ -1,9 +1,20 @@
+from abc import ABCMeta, abstractmethod
 from typing import Any
 
 from src.theatrical_player.money import Money
 
 
-class Statement:
+class Fillable(metaclass=ABCMeta):
+    @abstractmethod
+    def fill(self, tag, value):
+        pass
+
+    @abstractmethod
+    def print(self):
+        pass
+
+
+class Statement(Fillable):
 
     def __init__(self) -> None:
         self.cost: float = 0.0

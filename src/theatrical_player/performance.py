@@ -3,7 +3,7 @@ from typing import Iterable
 from src.theatrical_player.credits import Credits
 from src.theatrical_player.money import Money
 from src.theatrical_player.play import Play, PlaysCatalog
-from src.theatrical_player.statement import Statement
+from src.theatrical_player.statement import Fillable
 
 
 class Performance:
@@ -19,9 +19,9 @@ class Performance:
     def cost(self, play: Play) -> Money:
         return play.cost(self.audience)
 
-    def fill(self, statement: Statement, catalog: PlaysCatalog) -> None:
+    def fill(self, fillable: Fillable, catalog: PlaysCatalog) -> None:
         play = catalog.by_id(self.play_id)
-        statement.fill(
+        fillable.fill(
             "performance",
             {
                 "name": play.name,
