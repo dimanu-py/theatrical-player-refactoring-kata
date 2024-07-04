@@ -4,7 +4,9 @@ from src.theatrical_player.money import Money
 class Statement:
 
     def __init__(self) -> None:
-        self.data: dict[str, str | int] = {}
+        self.cost: float = 0.0
+        self.credits: int = 0
+        self.customer: str = ""
         self.lines: str = ""
         self.temporary_lines: str = ""
 
@@ -17,20 +19,20 @@ class Statement:
             self._fill_cost(value)
 
     def _fill_cost(self, value: Money) -> None:
-        self.data["cost"] = value.as_dollar()
+        self.cost = value.as_dollar()
 
     def _fill_credits(self, value: int) -> None:
-        self.data["credits"] = value
+        self.credits = value
 
     def _fill_customer(self, value: str) -> None:
-        self.data["customer"] = value
+        self.customer = value
 
     def fill_performance(self, play_name: str, cost: Money, audience: int) -> None:
         self.lines += f' {play_name}: {cost.as_dollar()} ({audience} seats)\n'
 
     def print(self) -> str:
-        self.temporary_lines = f"Statement for {self.data['customer']}\n"
+        self.temporary_lines = f"Statement for {self.customer}\n"
         temp_result = self.temporary_lines + self.lines
-        self.temporary_lines = f"Amount owed is {self.data["cost"]}\n"
-        self.temporary_lines += f"You earned {self.data["credits"]} credits\n"
+        self.temporary_lines = f"Amount owed is {self.cost}\n"
+        self.temporary_lines += f"You earned {self.credits} credits\n"
         return temp_result + self.temporary_lines
