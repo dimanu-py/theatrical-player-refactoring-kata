@@ -4,7 +4,7 @@ from approvaltests import verify
 
 from src.theatrical_player.invoice import Invoice
 from src.theatrical_player.performance import Performance, PerformancesRepository
-from src.theatrical_player.play import Play, PlaysCatalog
+from src.theatrical_player.play import Play, PlaysCatalog, Tragedy, Comedy
 from src.theatrical_player.printer import StatementPrinter
 from tests.conftest import IntelliJDiffReporter
 
@@ -17,15 +17,10 @@ class TestStatementPrinter(unittest.TestCase):
         self.intellij_diff_reporter = IntelliJDiffReporter()
 
     def test_can_produce_invoice_with_valid_plays(self):
-        catalog = PlaysCatalog({
-            "hamlet": Play.create("Hamlet", "tragedy"),
-            "as-like": Play.create("As You Like It", "comedy"),
-            "othello": Play.create("Othello", "tragedy")
-        })
         performances = PerformancesRepository([
-            Performance("hamlet", 55, catalog),
-            Performance("as-like", 35, catalog),
-            Performance("othello", 40, catalog)
+            Performance(Tragedy("Hamlet"), 55),
+            Performance(Comedy("As You Like It"), 35),
+            Performance(Tragedy("Othello"), 40)
         ])
         invoice = Invoice(customer=self.CUSTOMER, performances=performances)
 

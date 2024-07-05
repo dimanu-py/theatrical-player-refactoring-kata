@@ -2,19 +2,17 @@ from typing import Iterable
 
 from src.theatrical_player.credits import Credits
 from src.theatrical_player.money import Money
-from src.theatrical_player.play import PlaysCatalog
+from src.theatrical_player.play import Play
 from src.theatrical_player.statement import Fillable
 
 
 class Performance:
 
-    def __init__(self, play_id: str, audience: int, catalog: PlaysCatalog) -> None:
+    def __init__(self, play: Play, audience: int) -> None:
         self.audience = audience
-        self.catalog = catalog
-        self.play = catalog.by_id(play_id)
+        self.play = play
 
     def credits(self) -> Credits:
-        play = self.catalog.by_id(self.play_id)
         initial_credits = Credits(max(self.audience - 30, 0))
         return initial_credits.add(self.play.credits(self.audience))
 
