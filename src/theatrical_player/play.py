@@ -33,6 +33,9 @@ class Play(ABC):
     def cost(self, audience: int) -> Money:
         """Calculate play's cost"""
 
+    def title(self) -> str:
+        return self.name
+
 
 class Comedy(Play):
 

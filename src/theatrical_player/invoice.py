@@ -24,12 +24,10 @@ class Invoice:
 
     def cost(self, catalog: PlaysCatalog) -> Money:
         for performance in self.performances:
-            play = catalog.by_id(performance.play_id)
-            self._cost = self._cost.add(performance.cost(play))
+            self._cost = self._cost.add(performance.cost(catalog))
         return self._cost
 
     def credits(self, catalog: PlaysCatalog) -> Credits:
         for performance in self.performances:
-            play = catalog.by_id(performance.play_id)
-            self._credits = self._credits.add(performance.credits(play))
+            self._credits = self._credits.add(performance.credits(catalog))
         return self._credits
