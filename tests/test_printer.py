@@ -4,7 +4,7 @@ from approvaltests import verify
 
 from src.theatrical_player.invoice import Invoice
 from src.theatrical_player.performance import Performance, PerformancesRepository
-from src.theatrical_player.play import Play, PlaysCatalog, Tragedy, Comedy
+from src.theatrical_player.play import Play, Tragedy, Comedy
 from src.theatrical_player.printer import StatementPrinter
 from tests.conftest import IntelliJDiffReporter
 
@@ -31,8 +31,8 @@ class TestStatementPrinter(unittest.TestCase):
 
     def test_cannot_produce_invoice_of_unknown_plays_type(self):
         with self.assertRaises(ValueError) as exception_info:
-            PlaysCatalog({
-                "henry-v": Play.create("Henry V", "history"),
-                "as-like": Play.create("As You Like It", "pastoral")
-            })
+            PerformancesRepository([
+                Performance(Play.create("Henry V", "history"), 53),
+                Performance(Play.create("As You Like It", "pastoral"), 55)
+            ])
         self.assertIn("unknown type", str(exception_info.exception))

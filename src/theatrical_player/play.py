@@ -66,12 +66,3 @@ class Tragedy(Play):
     @staticmethod
     def _extra_cost_by_audience(audience: int) -> Money:
         return Money(1000 * (audience - 30)) if audience > 30 else Money(0)
-
-
-class PlaysCatalog:
-
-    def __init__(self, catalog: dict[str, Play]) -> None:
-        self.catalog = catalog
-
-    def by_id(self, play_id: str) -> Play:
-        return self.catalog.get(play_id)
