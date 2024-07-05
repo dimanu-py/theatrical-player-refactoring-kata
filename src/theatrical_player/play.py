@@ -13,17 +13,16 @@ class Genres(StrEnum):
 class Play(ABC):
     DEFAULT_CREDIT_STRATEGY = NoExtraCredits()
 
-    def __init__(self, name: str, genre: str) -> None:
+    def __init__(self, name: str) -> None:
         self.name = name
-        self.genre = genre
         self.credit_strategy: CreditsCalculationStrategy = self.DEFAULT_CREDIT_STRATEGY
 
     @classmethod
     def create(cls, name: str, genre: str) -> 'Play':
         if genre == Genres.COMEDY:
-            return Comedy(name, genre)
+            return Comedy(name)
         if genre == Genres.TRAGEDY:
-            return Tragedy(name, genre)
+            return Tragedy(name)
         raise ValueError(f'unknown type: {genre}')
 
     def credits(self, audience: int) -> Credits:
@@ -39,8 +38,8 @@ class Play(ABC):
 
 class Comedy(Play):
 
-    def __init__(self, name: str, genre: str) -> None:
-        super().__init__(name, genre)
+    def __init__(self, name: str) -> None:
+        super().__init__(name)
         self.credit_strategy = AudienceBasedCredits()
 
     def cost(self, audience: int) -> Money:
@@ -56,8 +55,8 @@ class Comedy(Play):
 
 class Tragedy(Play):
 
-    def __init__(self, name: str, genre: str) -> None:
-        super().__init__(name, genre)
+    def __init__(self, name: str) -> None:
+        super().__init__(name)
         self.credit_strategy = NoExtraCredits()
 
     def cost(self, audience: int) -> Money:
