@@ -14,7 +14,7 @@ class Fillable(metaclass=ABCMeta):
         pass
 
 
-class Statement(Fillable):
+class PlainTextStatement(Fillable):
 
     def __init__(self) -> None:
         self.cost: float = 0.0
