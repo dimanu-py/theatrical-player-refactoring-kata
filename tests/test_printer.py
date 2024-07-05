@@ -17,20 +17,20 @@ class TestStatementPrinter(unittest.TestCase):
         self.intellij_diff_reporter = IntelliJDiffReporter()
 
     def test_can_produce_invoice_with_valid_plays(self):
-        performances = PerformancesRepository([
-            Performance("hamlet", 55),
-            Performance("as-like", 35),
-            Performance("othello", 40)
-        ])
         catalog = PlaysCatalog({
             "hamlet": Play.create("Hamlet", "tragedy"),
             "as-like": Play.create("As You Like It", "comedy"),
             "othello": Play.create("Othello", "tragedy")
         })
+        performances = PerformancesRepository([
+            Performance("hamlet", 55, catalog),
+            Performance("as-like", 35, catalog),
+            Performance("othello", 40, catalog)
+        ])
         invoice = Invoice(customer=self.CUSTOMER, performances=performances)
 
         verify(
-            self.statement_printer.print(invoice, catalog),
+            self.statement_printer.print(invoice),
             reporter=self.intellij_diff_reporter
         )
 
