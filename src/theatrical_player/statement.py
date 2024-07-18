@@ -1,4 +1,5 @@
 from abc import ABCMeta, abstractmethod
+from collections import defaultdict
 from typing import Any
 
 from src.theatrical_player.money import Money
@@ -18,7 +19,7 @@ class PlainTextStatement(Fillable):
 
     def __init__(self) -> None:
         self.lines: str = ""
-        self.content: dict[str, Any] = {}
+        self.content: defaultdict[str, Any] = defaultdict(list)
 
     def fill(self, tag: str, value) -> None:
         if tag == "customer":
@@ -50,8 +51,6 @@ class PlainTextStatement(Fillable):
         self.content["customer"] = value
 
     def _fill_performance(self, play_name: str, cost: Money, audience: int) -> None:
-        if "performance" not in self.content:
-            self.content["performance"] = []
         self.content["performance"].append({
             "name": play_name,
             "cost": cost.as_dollar(),
