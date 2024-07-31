@@ -4,7 +4,7 @@ from abc import ABC, abstractmethod
 
 class Credits:
 
-    def __init__(self, initial_credits: int) -> None:
+    def __init__(self, initial_credits: float) -> None:
         self._credits = initial_credits
 
     def add(self, other: "Credits") -> "Credits":
@@ -14,7 +14,7 @@ class Credits:
         return self._credits == other._credits
 
     def __str__(self) -> str:
-        return f"{self._credits}"
+        return f"{math.floor(self._credits)}"
 
 
 class CreditsCalculationStrategy(ABC):
@@ -33,4 +33,4 @@ class NoExtraCredits(CreditsCalculationStrategy):
 class AudienceBasedCredits(CreditsCalculationStrategy):
 
     def credits(self, audience: int) -> Credits:
-        return Credits(math.floor(audience / 5))
+        return Credits(audience / 5)
